@@ -1,13 +1,27 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+
+const activeLink = ref('books');
+const menuList = [
+  { link: '#', title: 'books' },
+  { link: '#', title: 'audiobooks' },
+  { link: '#', title: 'Stationery & gifts' },
+  { link: '#', title: 'blog' }
+];
+</script>
 <template>
   <header>
     <div class="container">
       <span>Bookshop</span>
       <nav>
-        <a href="#">books</a>
-        <a href="#">audiobooks</a>
-        <a href="#">Stationery & gifts</a>
-        <a href="#">blog</a>
+        <a
+          v-for="item in menuList"
+          :key="item.title"
+          :href="item.link"
+          :class="{ active: item.title === activeLink}"
+          @click="activeLink = item.title"
+          >{{ item.title }}</a
+        >
       </nav>
       <div>
         <span><img src="/src/assets/img/icons/user.svg" alt="user" /></span>
@@ -23,7 +37,7 @@ header {
   background-color: #fff;
   position: fixed;
   width: 100vw;
-	z-index: 1;
+  z-index: 3;
 }
 .container {
   display: flex;
@@ -44,12 +58,9 @@ header {
 
     a {
       transition: all 200ms linear;
-      &:hover {
+      &.active {
         color: var(--text-black);
-        text-shadow:
-          0 0.2px 0.3px var(--text-black),
-          0 -0.2px 0.3px var(--text-black),
-          0 0.2px 0.3px var(--text-black);
+        font-weight: 900;
       }
     }
   }
@@ -60,6 +71,36 @@ header {
 
     span:hover {
       cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: 810px) {
+  .container {
+    height: 60px;
+  }
+}
+
+@media (max-width: 550px) {
+  .container {
+    & > span {
+      font-size: 2rem;
+    }
+
+    nav {
+      gap: 10px;
+      font-size: 7px;
+    }
+
+    div {
+      gap: 12px;
+      span {
+        height: 12px;
+
+        img {
+          height: 100%;
+        }
+      }
     }
   }
 }

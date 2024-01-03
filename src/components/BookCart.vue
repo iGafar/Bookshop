@@ -1,19 +1,43 @@
 <script setup>
-defineProps(['cart']);
-// import cart from '@/constants/index';
+import bookPlaceholder from '@/assets/img/book-cover-placeholder.png';
+const props = defineProps(['cart']);
+
+const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
 </script>
 
 <template>
   <div class="cart">
-    <img :src="cart.volumeInfo.imageLinks.thumbnail" alt="book-img" />
+    <picture>
+      <img :src="props.cart.volumeInfo.imageLinks?.thumbnail || bookPlaceholder" alt="book-img" />
+    </picture>
 
     <div>
-      <p class="author" v-for="author in cart.volumeInfo.authors" :key="author">{{ author }}</p>
-      <h3>{{ cart.volumeInfo.title }}</h3>
-      <span>2</span>
-      <span>3</span>
-      <p class="description">{{ cart.volumeInfo.description }}</p>
-      <p class="price">{{ cart.saleInfo.retailPrice }}</p>
+      <p class="author" v-for="author in props.cart.volumeInfo.authors" :key="author">
+        {{ author }}
+      </p>
+      <h3>{{ props.cart.volumeInfo.title }}</h3>
+      <span v-if="props.cart.volumeInfo.averageRating">
+        <img
+          src="/src/assets/img/icons/star-yellow.svg"
+          alt="yellow star"
+          v-for="star in Math.round(props.cart.volumeInfo.averageRating)"
+          :key="star"
+        />
+        <img
+          src="/src/assets/img/icons/star-gray.svg"
+          alt="star-gray"
+          v-for="star in grayStars"
+          :key="star"
+        />
+      </span>
+      <span v-if="props.cart.volumeInfo.ratingsCount"
+        >{{ props.cart.volumeInfo.ratingsCount }} review</span
+      >
+      <p class="description">{{ props.cart.volumeInfo.description }}</p>
+      <p class="price" v-if="props.cart.saleInfo.retailPrice?.amount">
+        {{ props.cart.saleInfo.retailPrice.currencyCode === 'RUB' ? '₽' : '$'
+        }}{{ props.cart.saleInfo.retailPrice.amount }}
+      </p>
       <button>in the cart</button>
     </div>
   </div>
@@ -27,11 +51,15 @@ defineProps(['cart']);
   align-items: center;
   gap: 36px;
   margin: 0 auto;
-  margin-bottom: 92px;
 
-  img {
-    width: 212px;
-    height: 300px;
+  picture {
+    min-width: 21.2rem;
+    height: 32.8rem;
+    img {
+      width: 100%;
+      height: 100%;
+      box-shadow: 0px 24px 36px 0px rgba(53, 49, 84, 0.28);
+    }
   }
 
   div {
@@ -67,6 +95,11 @@ defineProps(['cart']);
       font-family: 'Open Sans', sans-serif;
       font-size: 10px;
       text-transform: capitalize;
+      overflow: hidden;
+      display: -webkit-box;
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
 
     .price {
@@ -84,6 +117,52 @@ defineProps(['cart']);
       font-size: 8px;
       font-weight: 700;
       text-transform: uppercase;
+    }
+  }
+}
+
+@media (max-width: 1150px) {
+  .cart {
+    gap: 16px;
+    width: 395px;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 990px) {
+  .cart {
+    width: calc(50% - 10px);
+    gap: 10px;
+
+    div {
+      min-height: 70%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      span {
+        margin: 0 2px 5px 0;
+      }
+      button {
+        width: 100%;
+        margin-top: auto;
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .cart {
+    width: 100%;
+
+    div {
+      button {
+        width: 100px;
+        margin-left: auto;
+        height: 30px;
+      }
     }
   }
 }

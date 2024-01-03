@@ -36,10 +36,37 @@ main {
 .container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 30px;
 }
 
 .button {
   color: #4c3db2;
+}
+
+@media (max-width: 1025px) {
+  html,
+  body {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 860px) {
+  .container {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 650px) {
+  html,
+  body {
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 550px) {
+  html,
+  body {
+    font-size: 5px;
+  }
 }
 </style>

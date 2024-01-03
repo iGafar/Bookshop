@@ -9,6 +9,7 @@ let swiperContainer = null;
 addEventListener('resize', () => {
   getSwiperWidth();
   swipe();
+  headerHeight.value = document.querySelector('header').offsetHeight;
 });
 
 watch(currentPosition, () => {
@@ -60,12 +61,54 @@ onMounted(() => {
         ></span>
       </div>
     </div>
+
+    <a
+      href="https://absolutewrite.com/forums/index.php?threads/replacing-old-books-with-new-copies.345167/"
+      target="_blank"
+    >
+      Change old book on new
+      <img src="/src/assets/img/icons/arrow-for-link.svg" alt="arrow" />
+    </a>
+    <a
+      href="https://www.goodreads.com/list/show/176183.Better_Reading_Top_100_2022"
+      target="_blank"
+    >
+      top 100 books 2022
+      <img src="/src/assets/img/icons/arrow-for-link.svg" alt="arrow" />
+    </a>
   </section>
 </template>
 
 <style scoped lang="scss">
 section {
   margin-bottom: 105px;
+  position: relative;
+
+  & > a {
+    color: var(--text-black);
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    position: absolute;
+
+    &:first-of-type {
+      max-width: 149px;
+      top: 9%;
+      right: 6%;
+      display: inline-block;
+      padding: 102px 20px 36px;
+      background: #9e98dc;
+    }
+
+    &:last-of-type {
+      max-width: 137px;
+      bottom: 10%;
+      right: 0;
+      display: inline-block;
+      padding: 149px 47px 20px 21px;
+      background: #ff8fe6;
+    }
+  }
 }
 
 .swiper {
@@ -80,6 +123,7 @@ section {
       min-width: 100%;
       img {
         width: 100%;
+        height: 100%;
       }
     }
   }
@@ -104,5 +148,87 @@ section {
       background-color: #9e98dc;
     }
   }
+}
+
+@media (max-width: 1200px) {
+  section > a {
+    &:first-of-type {
+      max-width: 134px;
+      top: 0;
+      right: 2%;
+      padding: 60px 15px 20px;
+    }
+
+    &:last-of-type {
+      max-width: 121px;
+      bottom: 10%;
+      padding: 95px 30px 15px 15px;
+    }
+  }
+}
+
+@media (max-width: 810px) {
+  section > a {
+    img {
+      width: 40px;
+    }
+    &:first-of-type {
+      max-width: none;
+      top: 0;
+      right: unset;
+      padding: 7px;
+      left: 10px;
+    }
+
+    &:last-of-type {
+      max-width: none;
+      bottom: 29px;
+      padding: 7px;
+      right: 10px;
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  section {
+    margin-bottom: 50px;
+
+    a {
+      &:last-of-type {
+        bottom: 17px;
+      }
+    }
+  }
+  .swiper {
+    margin-bottom: 7px;
+  }
+
+  .pagination {
+    span {
+      width: 10px;
+      height: 10px;
+    }
+  }
+}
+
+@media (max-width: 550px) {
+  section > a {
+    img {
+			width: 26px;
+		}
+		
+		&:last-of-type,
+    &:first-of-type {
+      padding: 5px;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+	section > a {
+		img {
+			display: none;
+		}
+	}
 }
 </style>
