@@ -11,12 +11,16 @@ function mutateBasket() {
 
   rootStore.basket.includes(id) ? rootStore.removeFromBasket(id) : rootStore.addToBasket(id);
 }
+
+function formatRequestString(string) {
+	return string.replace('http://', 'https://')
+}
 </script>
 
 <template>
   <div class="cart">
     <picture>
-      <img :src="props.cart.volumeInfo.imageLinks?.thumbnail || bookPlaceholder" alt="book-img" />
+      <img :src="formatRequestString(props.cart.volumeInfo.imageLinks?.thumbnail) || bookPlaceholder" alt="book-img" />
     </picture>
 
     <div>
