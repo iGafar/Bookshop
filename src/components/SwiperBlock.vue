@@ -7,6 +7,10 @@ const swiperItemWidth = ref(0);
 const slides = 3;
 const swiperContainer = ref(null);
 
+function getSlide(i) {
+  return new URL(`../assets/img/swiper/banner${i}.jpg`, import.meta.url).href
+}
+
 addEventListener('resize', () => {
   getSwiperWidth();
   swipe();
@@ -49,7 +53,7 @@ onMounted(() => {
       <div class="swiper">
         <ul class="swiper-main">
           <li v-for="slide in slides" :key="slide">
-            <img :src="`/src/assets/img/swiper/banner${slide}.jpg`" alt="banner" />
+            <img :src="getSlide(slide)" alt="banner" />
           </li>
         </ul>
       </div>
