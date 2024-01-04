@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
+
 const headerHeight = ref(0);
-const currentPosition = ref(1);
+const currentPosition = ref(0);
 const swiperItemWidth = ref(0);
 const slides = 3;
-let swiperContainer = null;
+const swiperContainer = ref(null);
 
 addEventListener('resize', () => {
   getSwiperWidth();
@@ -23,7 +24,7 @@ function getSwiperWidth() {
 }
 
 function swipe() {
-  swiperContainer.style.transform =
+  swiperContainer.value.style.transform =
     `translateX(-` + swiperItemWidth.value * currentPosition.value + 'px)';
 }
 
@@ -34,7 +35,7 @@ function handlePagClick(i) {
 onMounted(() => {
   headerHeight.value = document.querySelector('header').offsetHeight;
   getSwiperWidth();
-  swiperContainer = document.querySelector('.swiper-main');
+  swiperContainer.value = document.querySelector('.swiper-main');
 
   setInterval(function () {
     currentPosition.value === 2 ? (currentPosition.value = 0) : currentPosition.value++;
@@ -90,6 +91,7 @@ section {
     font-weight: 700;
     text-transform: uppercase;
     position: absolute;
+    box-shadow: 0px 24px 36px 0px rgba(53, 49, 84, 0.28);
 
     &:first-of-type {
       max-width: 149px;
@@ -138,7 +140,7 @@ section {
     display: inline-block;
     width: 12px;
     height: 12px;
-    background-color: #efeef6;
+    background-color: var(--primary-light-color);
     border-radius: 50%;
 
     &:hover {
@@ -169,6 +171,7 @@ section {
 
 @media (max-width: 810px) {
   section > a {
+    box-shadow: none;
     img {
       width: 40px;
     }
@@ -214,10 +217,10 @@ section {
 @media (max-width: 550px) {
   section > a {
     img {
-			width: 26px;
-		}
-		
-		&:last-of-type,
+      width: 26px;
+    }
+
+    &:last-of-type,
     &:first-of-type {
       padding: 5px;
     }
@@ -225,10 +228,10 @@ section {
 }
 
 @media (max-width: 400px) {
-	section > a {
-		img {
-			display: none;
-		}
-	}
+  section > a {
+    img {
+      display: none;
+    }
+  }
 }
 </style>

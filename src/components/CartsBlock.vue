@@ -76,20 +76,21 @@ watch(activeGenre, async () => {
           </li>
         </ul>
         <div class="carts" v-if="books">
-          <BookCart v-for="cart in books" :key="cart.id" :cart="cart" />
+          <div class="carts-list">
+            <BookCart v-for="cart in books" :key="cart.id" :cart="cart" />
+          </div>
+          <button
+            type="button"
+            @click="getMoreBooks"
+            :disabled="loadMoreBtnText === 'No more books'"
+          >
+            {{ loadMoreBtnText }}
+          </button>
         </div>
         <div class="container loading" v-else>
           <p>Loading...</p>
         </div>
       </div>
-      <button
-        type="button"
-        @click="getMoreBooks"
-        :disabled="loadMoreBtnText === 'No more books'"
-        v-if="books"
-      >
-        {{ loadMoreBtnText }}
-      </button>
     </div>
   </section>
 </template>
@@ -110,29 +111,6 @@ watch(activeGenre, async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  & > button {
-    border: 1px solid var(--primary-color);
-    text-transform: uppercase;
-    padding: 17px 61px;
-    margin-bottom: 96px;
-    width: max-content;
-    transition: all 500ms linear;
-    color: var(--primary-color);
-    font-size: 8px;
-    font-weight: 700;
-
-    &:hover {
-      box-shadow: 0 0 10px var(--primary-color);
-    }
-
-    &:disabled {
-      box-shadow: none;
-      border-color: var(--text-gray);
-      color: var(--text-gray);
-      cursor: auto;
-    }
-  }
 }
 
 .loading {
@@ -160,11 +138,12 @@ watch(activeGenre, async () => {
     min-width: 190px;
     position: relative;
     height: fit-content;
+    margin-right: -25px;
 
     &::before {
       content: '';
       display: inline-block;
-      background-color: #efeef6;
+      background-color: var(--primary-light-color);
       position: absolute;
       left: -1000px;
       right: -6rem;
@@ -200,21 +179,60 @@ watch(activeGenre, async () => {
 }
 .carts {
   display: flex;
-  flex-wrap: wrap;
-  gap: 92px 36px;
-  margin-right: -35px;
+  flex-direction: column;
+  width: 100%;
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 92px 36px;
+    justify-content: space-between;
+    margin-bottom: 9.6rem;
+  }
+
+  button {
+    border: 1px solid var(--primary-color);
+    text-transform: uppercase;
+    padding: 17px 61px;
+    margin-bottom: 96px;
+    width: max-content;
+    transition: all 200ms linear;
+    color: var(--primary-color);
+    font-size: 8px;
+    font-weight: 700;
+    margin: 0 auto;
+
+    &:hover {
+      color: #fff;
+      background: var(--primary-color);
+    }
+
+    &:disabled {
+      background: none;
+      border-color: var(--text-gray);
+      color: var(--text-gray);
+      cursor: auto;
+    }
+  }
 }
 
 @media (max-width: 1150px) {
   .books {
     ul {
-      min-width: 131px;
+      min-width: 165px;
+      margin-right: 0;
     }
   }
 
-  .carts {
+  .carts-list {
     gap: 20px 10px;
-    margin-right: 0;
+  }
+}
+
+@media (max-width: 1025) {
+  .books {
+    ul {
+      min-width: 120px;
+    }
   }
 }
 
@@ -226,7 +244,7 @@ watch(activeGenre, async () => {
     display: block;
     width: max-content;
     position: absolute;
-    background-color: #efeef6;
+    background-color: var(--primary-light-color);
     padding: 10px;
     padding-left: 10px;
     left: 0;

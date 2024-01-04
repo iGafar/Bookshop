@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
+import { useRootStore } from '@/stores/root';
 
+const rootStore = useRootStore();
 const activeLink = ref('books');
 const menuList = [
   { link: '#', title: 'books' },
@@ -18,7 +20,7 @@ const menuList = [
           v-for="item in menuList"
           :key="item.title"
           :href="item.link"
-          :class="{ active: item.title === activeLink}"
+          :class="{ active: item.title === activeLink }"
           @click="activeLink = item.title"
           >{{ item.title }}</a
         >
@@ -26,7 +28,11 @@ const menuList = [
       <div>
         <span><img src="/src/assets/img/icons/user.svg" alt="user" /></span>
         <span><img src="/src/assets/img/icons/search.svg" alt="search" /></span>
-        <span><img src="/src/assets/img/icons/shop-bag.svg" alt="shop" /></span>
+        <span class="basket"
+          ><img src="/src/assets/img/icons/shop-bag.svg" alt="shop" /><span>{{
+            rootStore.basket.length
+          }}</span></span
+        >
       </div>
     </div>
   </header>
@@ -72,6 +78,25 @@ header {
     span:hover {
       cursor: pointer;
     }
+
+    .basket {
+      position: relative;
+
+      span {
+        position: absolute;
+        color: #fff;
+        min-width: 13px;
+        height: 13px;
+        padding: 0 1px;
+        border-radius: 10px;
+        text-align: center;
+        background-color: #ff353a;
+        font-size: 10px;
+        font-weight: 500;
+        right: -4px;
+        bottom: -1px;
+      }
+    }
   }
 }
 
@@ -99,6 +124,12 @@ header {
 
         img {
           height: 100%;
+        }
+      }
+      .basket {
+        span {
+          right: -6px;
+          bottom: -7px;
         }
       }
     }

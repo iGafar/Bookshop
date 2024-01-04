@@ -40,7 +40,7 @@ main {
 }
 
 .button {
-  color: #4c3db2;
+  color: var(--primary-color);
 }
 
 @media (max-width: 1025px) {

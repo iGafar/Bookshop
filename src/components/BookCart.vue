@@ -1,8 +1,16 @@
 <script setup>
 import bookPlaceholder from '@/assets/img/book-cover-placeholder.png';
-const props = defineProps(['cart']);
+import { useRootStore } from '@/stores/root';
 
+const props = defineProps(['cart']);
 const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
+const rootStore = useRootStore();
+
+function mutateBasket() {
+  const id = props.cart.id;
+
+  rootStore.basket.includes(id) ? rootStore.removeFromBasket(id) : rootStore.addToBasket(id);
+}
 </script>
 
 <template>
@@ -38,7 +46,9 @@ const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
         {{ props.cart.saleInfo.retailPrice.currencyCode === 'RUB' ? '₽' : '$'
         }}{{ props.cart.saleInfo.retailPrice.amount }}
       </p>
-      <button>in the cart</button>
+      <button @click="mutateBasket" :class="{ added: rootStore.basket.includes(props.cart.id) }">
+        {{ rootStore.basket.includes(props.cart.id) ? 'In the cart' : 'Buy now' }}
+      </button>
     </div>
   </div>
 </template>
@@ -50,7 +60,6 @@ const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
   justify-content: space-between;
   align-items: center;
   gap: 36px;
-  margin: 0 auto;
 
   picture {
     min-width: 21.2rem;
@@ -63,6 +72,11 @@ const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
   }
 
   div {
+    min-height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
     .author {
       text-transform: capitalize;
       margin-bottom: 4px;
@@ -112,11 +126,28 @@ const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
     button {
       width: 176px;
       height: 45px;
-      border: 1px solid #eeedf5;
-      color: var(--text-gray);
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
       font-size: 8px;
       font-weight: 700;
       text-transform: uppercase;
+      transition: all 200ms linear;
+      margin-top: auto;
+
+      &:hover {
+        color: #fff;
+        background: var(--primary-color);
+      }
+
+      &.added {
+        color: var(--text-gray);
+        border-color: #eeedf5;
+
+        &:hover {
+          color: #fff;
+          background: var(--text-gray);
+        }
+      }
     }
   }
 }
@@ -124,7 +155,7 @@ const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
 @media (max-width: 1150px) {
   .cart {
     gap: 16px;
-    width: 395px;
+    width: 405px;
 
     button {
       width: 100%;
@@ -132,22 +163,17 @@ const grayStars = Math.round(5 - props.cart.volumeInfo.averageRating);
   }
 }
 
-@media (max-width: 990px) {
+@media (max-width: 1050px) {
   .cart {
     width: calc(50% - 10px);
     gap: 10px;
 
     div {
-      min-height: 70%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
       span {
         margin: 0 2px 5px 0;
       }
       button {
         width: 100%;
-        margin-top: auto;
       }
     }
   }
