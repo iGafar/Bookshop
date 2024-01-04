@@ -13,7 +13,7 @@ function mutateBasket() {
 }
 
 function formatRequestString(string) {
-	return string.replace('http://', 'https://')
+	return string ? string.replace('http://', 'https://') : false
 }
 </script>
 
