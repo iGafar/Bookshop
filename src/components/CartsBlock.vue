@@ -2,7 +2,7 @@
 import BookCart from './BookCart.vue';
 import { BASE_URL, API_KEY } from '@/constants';
 import genres from '@/constants/subjects';
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 
 const books = ref(null);
 const startIndex = ref(0);
@@ -12,8 +12,14 @@ const url = computed(() => {
     activeGenre.value
   )}"&key=${API_KEY}&printType=books&startIndex=${startIndex.value}&maxResults=6&langRestrict=en`;
 });
-
+const genresIsOpen = ref(false);
 const loadMoreBtnText = ref('Load more');
+
+addEventListener('resize', () => {
+  if (window.innerWidth > 860) {
+    genresIsOpen.value = false;
+  }
+});
 
 async function getBooks() {
   const res = await fetch(url.value)
@@ -26,32 +32,14 @@ onBeforeMount(async () => {
   books.value = await getBooks();
 });
 
-let arrowBtn = null;
-let genresList = null;
-
-onMounted(() => {
-  arrowBtn = document.querySelector('.genres-arrow');
-  genresList = document.querySelector('.books ul');
-});
-
-function chooseGenre() {
-  if (arrowBtn.textContent === 'Choose a genres') {
-    genresList.style.transform = 'translateX(-10px)';
-    arrowBtn.textContent = 'Hide list';
-  } else {
-    genresList.style.transform = 'translateX(-229px)';
-    arrowBtn.textContent = 'Choose a genres';
-  }
-}
-
 async function getMoreBooks() {
   startIndex.value += 6;
   const newBooks = await getBooks();
-  newBooks ? books.value.push(...newBooks) : noMoreBooks();
+  newBooks ? books.value.push(...newBooks) : (loadMoreBtnText.value = 'No more books');
 }
 
-function noMoreBooks() {
-  loadMoreBtnText.value = 'No more books';
+function toggleGenresList() {
+  genresIsOpen.value = !genresIsOpen.value;
 }
 
 watch(activeGenre, async () => {
@@ -62,15 +50,18 @@ watch(activeGenre, async () => {
 
 <template>
   <section>
-    <p class="genres-arrow" @click="chooseGenre()">Choose a genres</p>
+    <p class="genres-arrow" @click="toggleGenresList">Choose a genres</p>
     <div class="container">
       <div class="books">
-        <ul>
+        <ul :class="{ 'mobile-open': genresIsOpen }">
           <li
             v-for="genre in genres"
             :key="genre"
             :class="{ active: genre === activeGenre }"
-            @click="activeGenre = genre"
+            @click="
+              toggleGenresList();
+              activeGenre = genre;
+            "
           >
             {{ genre }}
           </li>
@@ -272,6 +263,10 @@ watch(activeGenre, async () => {
       transform: translateX(-229px);
       transition: all 400ms linear;
       font-size: 10px;
+
+      &.mobile-open {
+        transform: translateX(-10px);
+      }
 
       &::before {
         top: -20px;
